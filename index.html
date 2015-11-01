@@ -43,15 +43,16 @@
 <ol>
 <li><p>Setup Chef Workstation (included push-jobs), add target node and config knife command by knife.rb.<br>
 Reference: <a href="http://a-msy.jp/wiki/wiki.cgi?page=OSSChefServer">http://a-msy.jp/wiki/wiki.cgi?page=OSSChefServer</a>  </p></li>
-<li><p>Setup initial setting by chefscript/init.sh on Chef Workstation<br>
+<li><p>Setup initial setting by chefscript/init.sh on Chef Workstation.<br>
 Create MySQL database and user<br>
 Change mode client program "cscli"<br>
 Update PATH env for "cscli"<br>
 Bundle install for dependency  </p></li>
-<li><p>Run the server program<br>
+<li><p>Run the server program.<br>
 Run on Chef Workstation: ruby chefscript/src/main.rb  </p></li>
-<li><p>Manage ChefScript server by client program<br>
-Run on Client: cscli  </p></li>
+<li><p>Create ChefScript DSL, and manage ChefScript server by client program.<br>
+Run on Client: cscli *  </p></li>
+<li><p>Please read more information from Wiki.</p></li>
 </ol>
 
 <h4>
@@ -76,13 +77,32 @@ Run: ruby chefscript/OLD_VERSION/0.1.0/src/main.rb chefscript/OLD_VERSION/0.1.0/
 </ul>
 
 <hr>
+
+<h3>
+<a id="research" class="anchor" href="#research" aria-hidden="true"><span class="octicon octicon-link"></span></a>Research</h3>
+
+<ul>
+<li><p>2014-11
+第26回コンピュータシステム・シンポジウム (ComSys2014)<br>
+"ChefScript: 運用支援のための時系列記述が可能な構成管理手法"  </p></li>
+<li><p>2015-03
+情報処理学会 第77回全国大会<br>
+"ChefScript: 運用ワークフロー記述を可能とする構成管理記述言語"<br>
+"ChefScript: A Workflow Description Language for System Configuration Management"  </p></li>
+<li><p>2015-08
+Summer United Workshops on Parallel, Distributed and Cooperative Processing (SWoPP2015)<br>
+"ChefScript: ログベースの障害回復性を備えた運用ワークフロー記述言語"<br>
+"ChefScript: A Workflow Description Language with Log Based Recovery"  </p></li>
+</ul>
+
+<hr>
       </section>
     </div>
 
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
       <footer class="inner">
-        <p class="copyright">ChefScript maintained by <a href="https://github.com/MasayaAoyama">MasayaAoyama</a></p>
+        <p class="copyright">ChefScript maintained by <a href="https://github.com/chefscript">chefscript</a></p>
         <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
