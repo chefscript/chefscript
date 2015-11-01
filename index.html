@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Chefscript : ChefScript: Time-Sequential Configuration Management Language for Operation Support">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Chefscript</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/chefscript/chefscript">View on GitHub</a>
+
+          <h1 id="project_title">Chefscript</h1>
+          <h2 id="project_tagline">ChefScript: Time-Sequential Configuration Management Language for Operation Support</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/chefscript/chefscript/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/chefscript/chefscript/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="chefscript-time-sequential-configuration-management-language-for-operation-support" class="anchor" href="#chefscript-time-sequential-configuration-management-language-for-operation-support" aria-hidden="true"><span class="octicon octicon-link"></span></a>ChefScript: Time-Sequential Configuration Management Language for Operation Support</h1>
+
+<p>Current Version: 0.2.0 (2015-10-31 03:55)</p>
+
+<p>This software is Open Source Software under the MIT License.</p>
+
+<hr>
+
+<h3>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to use</h3>
+
+<ol>
+<li><p>Setup Chef Workstation (included push-jobs), add target node and config knife command by knife.rb.<br>
+Reference: <a href="http://a-msy.jp/wiki/wiki.cgi?page=OSSChefServer">http://a-msy.jp/wiki/wiki.cgi?page=OSSChefServer</a>  </p></li>
+<li><p>Setup initial setting by chefscript/init.sh on Chef Workstation<br>
+Create MySQL database and user<br>
+Change mode client program "cscli"<br>
+Update PATH env for "cscli"<br>
+Bundle install for dependency  </p></li>
+<li><p>Run the server program<br>
+Run on Chef Workstation: ruby chefscript/src/main.rb  </p></li>
+<li><p>Manage ChefScript server by client program<br>
+Run on Client: cscli  </p></li>
+</ol>
+
+<h4>
+<a id="caution" class="anchor" href="#caution" aria-hidden="true"><span class="octicon octicon-link"></span></a>Caution</h4>
+
+<p>This software is beta version, so we may make changes to specifications.  </p>
+
+<hr>
+
+<h3>
+<a id="update-log" class="anchor" href="#update-log" aria-hidden="true"><span class="octicon octicon-link"></span></a>Update log</h3>
+
+<ul>
+<li><p>Version 0.2.0 (2015-10-31 03:55)<br>
+Using backend storage system for failure recoverability.<br>
+REST API implementation for daemonize and etc.<br>
+Run on Chef Workstation: ruby chefscript/src/main.rb<br>
+Run on Client: cscli  </p></li>
+<li><p>Version 0.1.0 (2015-06-28 01:25) [will be Discontinued]<br>
+Minimum functions version<br>
+Run: ruby chefscript/OLD_VERSION/0.1.0/src/main.rb chefscript/OLD_VERSION/0.1.0/sample/dsl/dsl.rb  </p></li>
+</ul>
+
+<hr>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Chefscript maintained by <a href="https://github.com/chefscript">chefscript</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
