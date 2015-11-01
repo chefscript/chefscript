@@ -1,44 +1,44 @@
 # Abstract
 
-ChefScript can use 3 backend datastore.
-0. MySQL
-1. SQLite
-2. JSON
+ChefScript can use 3 backend datastore.  
+0. MySQL  
+1. SQLite  
+2. JSON  
 
 
 # Memo
 
-Interval Task objects for waiting X seconds are not saved.
-Because, it is generate by simple way in linking() phase and it is consisted by single attribute (wait secound).
+Interval Task objects for waiting X seconds are not saved.  
+Because, it is generate by simple way in linking() phase and it is consisted by single attribute (wait secound).  
 
-Apply Task objects are not saved.
-Because, it is generate in linking() phase and it is consisted by single attribute (node name).
+Apply Task objects are not saved.  
+Because, it is generate in linking() phase and it is consisted by single attribute (node name).  
 
-task_kind id
-0: create
-1: recipe
-2: json
-3: role
-4: environment
-5: databag
-6: interval
-7: apply
+task_kind id  
+0: create  
+1: recipe  
+2: json  
+3: role  
+4: environment  
+5: databag  
+6: interval  
+7: apply  
 
-state id
-0: pending
-1: running
-2: done
+state id  
+0: pending  
+1: running  
+2: done  
 
 
 # MySQL backend
 
 ## Used datatype in MySQL
-TINYINT UNSIGNED
-INT UNSIGNED
-VARCHAR(256)
-TEXT
-BOOLEAN
-TIMESTAMP
+TINYINT UNSIGNED  
+INT UNSIGNED  
+VARCHAR(256)  
+TEXT  
+BOOLEAN  
+TIMESTAMP  
 
 ## Table List
 
@@ -178,9 +178,9 @@ completed_at [TIMESTAMP]
 # SQLite backend (NOT implemented)
 
 ## Used datatype in SQLite
-INTEGER
-TEXT
-TIMESTAMP
+INTEGER  
+TEXT  
+TIMESTAMP  
 
 ## Table List
 
@@ -191,9 +191,9 @@ TIMESTAMP
 # JSON backend (NOT implemented)
 
 ## Used datatype in json
-int
-String
-bool
+int  
+String  
+bool  
 
 ## File List
 
