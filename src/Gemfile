@@ -1,0 +1,14 @@
+gem 'sinatra'
+gem 'sqlite3'
+gem 'sqlite3-ruby'
+gem 'mysql2'
+gem 'mysql2-cs-bind'
+gem 'unindent'
+
+# gem install sinatra
+# gem install sqlite3
+# gem install sqlite3-ruby
+# gem install mysql2
+# gem install mysql2-cs-bind
+# gem install unindent
+

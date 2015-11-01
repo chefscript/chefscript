@@ -1,0 +1,204 @@
+#!/opt/chef/embedded/bin/ruby
+
+##############################################
+# cscli (ChefScript Command Line Interface)
+# Version: #{$version}
+
+# Common Option:
+# -p --port=VALUE
+# -h --host=VALUE
+
+# Usage:
+# cscli [--help] [-v / --version]
+# cscli taskgroup list [-t TYPE / --type=TYPE]
+# cscli taskgroup show NAME
+# cscli task list [-t TYPE / --type=TYPE]
+# cscli task show NAME
+# cscli dsl add NAME
+# cscli dsl edit NAME [-a / --all]
+# cscli dsl delete NAME [-a / --all]
+# cscli dsl load [NAME] [-a / --all]
+# cscli dsl reload [NAME] [-a / --all]
+# cscli dsl show NAME [-a / --all]
+# cscli dsl list [-a / --all]
+# cscli backend show
+# cscli backend convert {json|mysql|sqlite} {json|mysql|sqlite} [-H VALUE / --mysqlhost=VALUE] [-P VALUE / --mysqlport=VALUE] [-U VALUE / --mysqluser=VALUE] [-P VALUE / --mysqlpass=VALUE] [-D VALUE / --mysqldbname=VALUE] [-J VALUE / --jsondir=VALUE] [-L VALUE / --sqlitepath=VALUE]
+# cscli shutdown
+# cscli history
+##############################################
+
+require 'optparse'
+require 'net/http'
+require 'unindent'
+require 'uri'
+
+$version = "0.2.0"
+$host = "localhost"
+$port = "1125"
+$option = {}
+$debug = false
+$editor = "vi"
+
+
+# Check EDITOR environment attribute for editing some code
+if !ENV["EDITOR"].nil? && !(ENV["EDITOR"] == "")
+    $editor = ENV["EDITOR"]
+end
+
+# Show help
+def show_help()
+    msg = <<-"_EOF_".unindent()
+        cscli (ChefScript Command Line Interface)
+        Version: #{$version}
+
+        Common Option:
+        -p --port=VALUE
+        -h --host=VALUE
+
+        Usage:
+        cscli [--help] [-v / --version]
+        cscli taskgroup list [-t TYPE / --type=TYPE]
+        cscli taskgroup show NAME
+        cscli task list [-t TYPE / --type=TYPE]
+        cscli task show NAME
+        cscli dsl add NAME
+        cscli dsl edit NAME [-a / --all]
+        cscli dsl delete NAME [-a / --all]
+        cscli dsl load [NAME] [-a / --all]
+        cscli dsl reload [NAME] [-a / --all]
+        cscli dsl show NAME [-a / --all]
+        cscli dsl list [-a / --all]
+        cscli backend show
+        cscli backend convert {json|mysql|sqlite} {json|mysql|sqlite} [-H VALUE / --mysqlhost=VALUE] [-P VALUE / --mysqlport=VALUE] [-U VALUE / --mysqluser=VALUE] [-P VALUE / --mysqlpass=VALUE] [-D VALUE / --mysqldbname=VALUE] [-J VALUE / --jsondir=VALUE] [-L VALUE / --sqlitepath=VALUE]
+        cscli shutdown
+        cscli history
+    _EOF_
+
+    puts(msg)
+    exit()
+end
+
+
+#################################################################
+# Create HTTP request, send and show results
+#################################################################
+def request_api(argv)
+    http = Net::HTTP.new($host, $port)
+
+    request_url = ""
+    argv.each do |part_of_path|
+        request_url += "/#{part_of_path}"
+    end
+    request_url += "?version=#{$version}"
+
+    if !$option.empty?
+        $option.each do |key, val|
+            request_url += "&#{key}=#{val}"
+        end
+    end
+
+    # File handling for DSL add/edit
+    if argv[0] == "dsl" && argv[1] == "add"
+        dslcontentdata = File.read(argv[2])
+        if dslcontentdata == "" || dslcontentdata.nil?
+            puts "DSL file is empty or not exist"
+            exit()
+        end
+        request_url += "&contents=#{dslcontentdata}"
+    end
+
+    if $debug
+        puts "#{$host}:#{$port}#{request_url}"
+    else
+        req = Net::HTTP::Get.new(URI.escape(request_url))
+        res = http.request(req)
+    end
+
+    puts res.body
+end
+
+#################################################################
+# Parse command line options
+#################################################################
+case ARGV[0]
+when "taskgroup"
+    types = ["pending", "running", "done"]
+    OptionParser.new() do |opt|
+        opt.on('-h VALUE', '--host=VALUE', 'Hostname of ChefScript Server') {|v| $host = v }
+        opt.on('-p VALUE', '--port=VALUE', 'Port number of ChefScript Server') {|v| $port = v }
+        opt.on('-t VALUE', '--type=VALUE', types, 'Select types [pending | running | done]') {|v| $option[:type] = v }
+        opt.parse!(ARGV)
+    end
+    if !(ARGV[1] == "list" && ARGV[2].nil?) && !(ARGV[1] == "show" && !ARGV[2].nil? && ARGV[3].nil?)
+        show_help()
+    end
+
+when "task"
+    types = ["json", "role", "environment", "databag", "recipe", "create", "interval"]
+    OptionParser.new() do |opt|
+        opt.on('-h VALUE', '--host=VALUE', 'Hostname of ChefScript Server') {|v| $host = v }
+        opt.on('-p VALUE', '--port=VALUE', 'Port number of ChefScript Server') {|v| $port = v }
+        opt.on('-t VALUE', '--type=VALUE', types, 'Select types [json | role | environment | databag | recipe | create | interval]') {|v| $option[:type] = v }
+        opt.parse!(ARGV)
+    end
+    if !(ARGV[1] == "list" && ARGV[2].nil?) && !(ARGV[1] == "show" && !ARGV[2].nil? && ARGV[3].nil?)
+        show_help()
+    end
+
+when "dsl"
+    OptionParser.new() do |opt|
+        opt.on('-h VALUE', '--host=VALUE', 'Hostname of ChefScript Server') {|v| $host = v }
+        opt.on('-p VALUE', '--port=VALUE', 'Port number of ChefScript Server') {|v| $port = v }
+        opt.on('-a', '--all', 'Apply to all files') {|v| $option[:all] = v }
+        opt.on('-l', '--loaded', 'Show loaded DSL files list') {|v| $option[:loaded] = v }
+        opt.on('-u', '--unloaded', 'Show unloaded DSL files list') {|v| $option[:unloaded] = v }
+        opt.parse!(ARGV)
+    end
+
+    if $option[:loaded] && $option[:unloaded]
+        show_help()
+    end
+
+    if !(ARGV[1] == "list" && ARGV[2].nil?) && !((ARGV[1] == "show" || ARGV[1] == "add" || ARGV[1] == "edit" || ARGV[1] == "delete" || ARGV[1] == "load" || ARGV[1] == "reload") && !ARGV[2].nil? && ARGV[3].nil?) && !((ARGV[1] == "load" || ARGV[1] == "reload") && ARGV[2].nil? && $option[:all])
+        show_help()
+    end
+
+when "backend"
+    OptionParser.new() do |opt|
+        opt.on('-h VALUE', '--host=VALUE', 'Hostname of ChefScript Server') {|v| $host = v }
+        opt.on('-p VALUE', '--port=VALUE', 'Port number of ChefScript Server') {|v| $port = v }
+        opt.on('-H VALUE', '--mysqlhost=VALUE', 'Hostname of Mysql Server') {|v| $option[:mysql_host] = v }
+        opt.on('-P VALUE', '--mysqlport=VALUE', 'Port number of Mysql Server') {|v| $option[:mysql_port] = v }
+        opt.on('-U VALUE', '--mysqluser=VALUE', 'Username of Mysql Server') {|v| $option[:mysql_user] = v }
+        opt.on('-P VALUE', '--mysqlpass=VALUE', 'Password of Mysql Server') {|v| $option[:mysql_pass] = v }
+        opt.on('-D VALUE', '--mysqldbname=VALUE', 'Database name of Mysql Server') {|v| $option[:mysql_database_name] = v }
+        opt.on('-J VALUE', '--jsondir=VALUE', 'JSON file path') {|v| $option[:json_path] = v }
+        opt.on('-L VALUE', '--sqlitepath=VALUE', 'SQLite3 file path') {|v| $option[:sqlite_path] = v }
+        opt.parse!(ARGV)
+    end
+    if !(ARGV[1] == "convert" && ARGV[2].downcase() =~ /json|mysql|sqlite/ && ARGV[3].nil?) && !(ARGV[1] == "show" && ARGV[2].nil?)
+        show_help()
+    end
+
+when "history"
+    OptionParser.new() do |opt|
+        opt.on('-h VALUE', '--host=VALUE', 'Hostname of ChefScript Server') {|v| $host = v }
+        opt.on('-p VALUE', '--port=VALUE', 'Port number of ChefScript Server') {|v| $port = v }
+        opt.parse!(ARGV)
+    end
+
+when "shutdown"
+    OptionParser.new() do |opt|
+        opt.on('-h VALUE', '--host=VALUE', 'Hostname of ChefScript Server') {|v| $host = v }
+        opt.on('-p VALUE', '--port=VALUE', 'Port number of ChefScript Server') {|v| $port = v }
+        opt.parse!(ARGV)
+    end
+
+else
+    show_help()
+    exit()
+end
+
+# show result of command
+request_api(ARGV)
+

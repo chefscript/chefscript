@@ -1,0 +1,14 @@
+#!/bin/bash
+
+RAND=$(( ${RANDOM} * 3 / 32768 ))
+
+# echo "Random number is $RAND."
+
+if [ $RAND -eq 1 ]
+then
+  true
+else
+  false
+fi
+
+

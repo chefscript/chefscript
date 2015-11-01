@@ -1,0 +1,10 @@
+#!/bin/bash
+
+LOGFILE=/var/log/chefscript_knife_stub.log
+
+touch ${LOGFILE}
+echo "$0 $@" >> ${LOGFILE}
+echo '{"key1": "val1", "normal": {"apache": {"exec_user": "apache"}, "key-key2": "val-val2"}, "raw_data": {"sample_key": "sample_val"}}'
+
+if [ $1 == "data" ]; then echo 'garbege line'; fi
+
